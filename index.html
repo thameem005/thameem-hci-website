@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aura Optics | Premium Eye-Wear</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- MediaPipe -->
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/hands/hands.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@mediapipe/camera_utils/camera_utils.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="bg-blob blob-1"></div>
+    <div class="bg-blob blob-2"></div>
+
+    <header class="header">
+        <div class="logo" onclick="window.scrollTo(0, 0)">AURA<span>OPTICS</span></div>
+        <nav class="nav" id="main-nav">
+            <a href="#home" class="nav-link active">Home</a>
+            <a href="#collection" class="nav-link">Collection</a>
+            <a href="#tech" class="nav-link">Technology</a>
+            <a href="#contact" class="nav-link">Contact</a>
+        </nav>
+        <div class="header-actions">
+            <button id="voice-trigger" class="btn-icon" title="Voice Control (V)">
+                <i data-lucide="mic"></i>
+            </button>
+            <button id="gesture-trigger" class="btn-icon" title="Gesture Control (G)">
+                <i data-lucide="hand"></i>
+            </button>
+            <button id="cart-btn" class="btn-icon cart-btn" title="Cart (C)">
+                <i data-lucide="shopping-bag"></i>
+                <span class="cart-count">0</span>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Home Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <span class="section-tag">Premium Innovation</span>
+                <h1>A New Way <br>to See.</h1>
+                <p class="hero-text">The world's first smart-eyewear powered by intuitive voice and gesture interaction.
+                    Design your reality with Aura Optics.</p>
+                <div class="hero-btns">
+                    <button class="btn btn-primary" onclick="window.location.hash='collection'">Shop Collection</button>
+                    <button class="btn btn-secondary" onclick="window.location.hash='tech'">Explore Tech</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="image-box">
+                    <img src="aura_hero.png" alt="Aura Elite Specs">
+                </div>
+            </div>
+        </section>
+
+        <!-- Collection Section -->
+        <section id="collection" class="collection">
+            <div class="collection-header">
+                <span class="section-tag">Exclusive Catalog</span>
+                <h2>Visionary Designs</h2>
+            </div>
+            <div class="product-grid" id="product-grid">
+                <!-- Data injected via main.js -->
+            </div>
+        </section>
+
+        <!-- Tech Section (New Page) -->
+        <section id="tech" class="tech">
+            <div class="collection-header">
+                <span class="section-tag">Core Technology</span>
+                <h2>Hands-Free Future</h2>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <i data-lucide="speech"></i>
+                    <h3>Voice OS</h3>
+                    <p>Powered by Web-Speech Intelligence for instantaneous hands-free navigation across all pages.</p>
+                </div>
+                <div class="tech-card">
+                    <i data-lucide="move"></i>
+                    <h3>Neural Gesture</h3>
+                    <p>Real-time pose estimation using MediaPipe for high-precision scroll and selection control.</p>
+                </div>
+                <div class="tech-card">
+                    <i data-lucide="shield-check"></i>
+                    <h3>Secure Vision</h3>
+                    <p>Local processing ensures your interaction data never leaves the device's edge memory.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section (New Page) -->
+        <section id="contact" class="contact">
+            <div class="collection-header">
+                <span class="section-tag">Get in Touch</span>
+                <h2>Global Support</h2>
+            </div>
+            <div class="glass-card"
+                style="max-width: 600px; margin: 0 auto; padding: 40px; border-radius: 30px; border: 1px solid var(--glass-border); background: var(--glass);">
+                <form id="contact-form" onsubmit="event.preventDefault(); showFeedback('Message Sent Successfully!')">
+                    <div style="margin-bottom: 2rem;">
+                        <input type="text" placeholder="Full Name"
+                            style="width: 100%; padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--dark); color: white;"
+                            required>
+                    </div>
+                    <div style="margin-bottom: 2rem;">
+                        <input type="email" placeholder="Email Address"
+                            style="width: 100%; padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--dark); color: white;"
+                            required>
+                    </div>
+                    <div style="margin-bottom: 2rem;">
+                        <textarea placeholder="Message"
+                            style="width: 100%; padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border); background: var(--dark); color: white; min-height: 150px;"
+                            required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full" style="width: 100%">Send Inquiry</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- UI Overlays & Feedback -->
+        <div id="voice-indicator" class="mini-indicator hidden">
+            <div class="mic-dot"></div>
+            <span>Listening...</span>
+        </div>
+
+        <div id="gesture-preview" class="floating-webcam hidden">
+            <video id="webcam" autoplay playsinline></video>
+            <div class="gesture-status">
+                👍 Add | 🖐️ Down | ✌️ Up
+            </div>
+        </div>
+
+        <section id="cart-drawer" class="drawer hidden">
+            <div class="drawer-header">
+                <h3>Shopping Cart</h3>
+                <button id="close-cart"
+                    style="background:none; border:none; color:white; font-size:2rem; cursor:pointer">&times;</button>
+            </div>
+            <div id="cart-items" class="cart-items">
+                <p class="empty-msg">Your cart is empty</p>
+            </div>
+            <div class="drawer-footer">
+                <div class="total">Global Total: <span id="cart-total">$0</span></div>
+                <button class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </section>
+    </main>
+
+    <div id="feedback-message" class="feedback-message">Success</div>
+
+    <div id="rules-dashboard" class="rules-dashboard hidden">
+        <div class="rules-header">
+            <h3>HCI Principles Matrix</h3>
+            <button id="close-dashboard"
+                style="background:none; border:none; color:white; font-size:1.5rem;">&times;</button>
+        </div>
+        <ul id="rules-list"></ul>
+    </div>
+
+    <!-- Main Logic -->
+    <script src="main.js"></script>
+</body>
+
+</html>
